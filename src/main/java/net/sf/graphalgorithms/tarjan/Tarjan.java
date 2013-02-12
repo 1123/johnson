@@ -77,7 +77,7 @@ public class Tarjan <NodeType,EdgeType> {
 					break;
 				}
 			}
-			result.add(sccList);
+			if (sccList.size() > 1) { result.add(sccList); } // don't return trivial sccs in the form of single nodes.
 		}
 		return result;
 	}
