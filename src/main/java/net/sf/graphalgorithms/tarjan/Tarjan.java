@@ -37,7 +37,7 @@ public class Tarjan <NodeType,EdgeType> {
 		stack = new Stack<NodeType>();
 		List<List<NodeType>> result = new ArrayList<List<NodeType>>();
 		for (NodeType v : this.dg.getVertices()) {
-			if (indexMap.get(v) == 0) {
+			if (indexMap.get(v) == null) {
 				result.addAll(this.strongConnect(v));
 			}
 		}
