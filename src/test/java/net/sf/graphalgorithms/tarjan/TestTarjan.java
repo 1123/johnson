@@ -1,9 +1,10 @@
-package net.sf.graphalgorithms.johnson;
+package net.sf.graphalgorithms.tarjan;
 
 import static org.junit.Assert.*;
 
 import java.util.List;
 
+import net.sf.graphalgorithms.johnson.WeightedEdge;
 import net.sf.graphalgorithms.tarjan.Tarjan;
 
 import org.junit.Test;

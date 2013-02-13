@@ -7,18 +7,20 @@ import java.util.*;
 
 import net.sf.graphalgorithms.tarjan.Tarjan;
 
-/**
- * Created with IntelliJ IDEA.
- * User: benediktlinse
- * Date: 09.02.13
- * Time: 22:02
- * To change this template use File | Settings | File Templates.
- */
 public class Johnson {
 
-    static Map<Integer, Boolean> blocked = new HashMap<Integer, Boolean>();
-    static Map<Integer, List<Integer>> blockedNodes = new HashMap<Integer, List<Integer>>();
-
+    Map<Integer, Boolean> blocked;
+    Map<Integer, List<Integer>> blockedNodes;
+    List<Stack<Integer>> circuits;
+    DirectedGraph<Integer, WeightedEdge> dg;
+    
+    public Johnson(DirectedGraph<Integer, WeightedEdge> dg) {
+        blocked = new HashMap<Integer, Boolean>();
+        blockedNodes = new HashMap<Integer, List<Integer>>();
+        circuits = new ArrayList<Stack<Integer>>();
+        this.dg = dg;
+    }
+    
     public void unblock(Integer u) {
         blocked.put(u, false);
         while (blockedNodes.get(u).size() > 0) {
@@ -38,7 +40,7 @@ public class Johnson {
         for (Integer w : dg.getSuccessors(v)) {
             if (w == s) {
                 stack.push(s);
-                System.err.println("found circuit: " + stack);
+                this.circuits.add((Stack<Integer>) stack.clone());
                 stack.pop();
                 f = true;
             }
@@ -60,7 +62,7 @@ public class Johnson {
         return f;
     }
 
-    public DirectedGraph<Integer, WeightedEdge> leastSCC(DirectedGraph<Integer,WeightedEdge> dg) throws JohnsonIllegalStateException {
+    public static DirectedGraph<Integer, WeightedEdge> leastSCC(DirectedGraph<Integer,WeightedEdge> dg) throws JohnsonIllegalStateException {
         Tarjan<Integer, WeightedEdge> t = new Tarjan<Integer, WeightedEdge>(dg);
     	List<List<Integer>> sccs = t.tarjan();
         Integer min = Integer.MAX_VALUE;
@@ -87,7 +89,7 @@ public class Johnson {
         return result;
     }
 
-    private DirectedGraph<Integer, WeightedEdge> addEdges(List<Integer> list, DirectedGraph<Integer, WeightedEdge> dg) throws JohnsonIllegalStateException {
+    private static DirectedGraph<Integer, WeightedEdge> addEdges(List<Integer> list, DirectedGraph<Integer, WeightedEdge> dg) throws JohnsonIllegalStateException {
         if (list == null) { throw new JohnsonIllegalStateException(); }
         if (dg == null) { throw new JohnsonIllegalStateException(); }
         DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<Integer, WeightedEdge>();
@@ -102,7 +104,7 @@ public class Johnson {
         return result;
     }
 
-    public DirectedGraph<Integer, WeightedEdge> subGraphFrom(Integer i, DirectedGraph<Integer, WeightedEdge> in) {
+    public static DirectedGraph<Integer, WeightedEdge> subGraphFrom(Integer i, DirectedGraph<Integer, WeightedEdge> in) {
         DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<Integer, WeightedEdge>();
         for (Integer from : in.getVertices()) {
             if (from >= i) {
@@ -115,10 +117,8 @@ public class Johnson {
         }
         return result;
     }
-
-
     
-    public  void findCircuits(DirectedGraph<Integer, WeightedEdge> dg) throws JohnsonIllegalStateException {
+    public void findCircuits() throws JohnsonIllegalStateException {
         blocked = new HashMap<Integer, Boolean>();
         blockedNodes = new HashMap<Integer, List<Integer>>();
         Stack<Integer> stack = new Stack<Integer>();

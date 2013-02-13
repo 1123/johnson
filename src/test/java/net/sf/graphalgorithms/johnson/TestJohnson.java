@@ -5,7 +5,6 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import net.sf.graphalgorithms.johnson.Johnson.JohnsonIllegalStateException;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 
 import java.util.Random;
 
@@ -20,7 +19,8 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 1);
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 2);
         dsg.addEdge(new WeightedEdge((float) 1.0), 2, 3);
-        new Johnson().findCircuits(dsg);
+        Johnson j = new Johnson(dsg);
+        j.findCircuits();
     }
 
     @Test
@@ -32,7 +32,8 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge((float) 1.0), 4, 5);
         dsg.addEdge(new WeightedEdge((float) 1.0), 5, 6);
         dsg.addEdge(new WeightedEdge((float) 1.0), 6, 4);
-        new Johnson().findCircuits(dsg);
+        Johnson j = new Johnson(dsg);
+        j.findCircuits();
     }
 
     @Test
@@ -42,7 +43,7 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 1);
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 2);
         dsg.addEdge(new WeightedEdge((float) 1.0), 2, 3);
-        DirectedGraph<Integer, WeightedEdge> subGraph = new Johnson().subGraphFrom(2, dsg);
+        DirectedGraph<Integer, WeightedEdge> subGraph = Johnson.subGraphFrom(2, dsg);
         assertTrue(subGraph.containsVertex(2));
         assertTrue(subGraph.containsVertex(3));
         System.err.println(subGraph);
@@ -55,7 +56,12 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge((float) 1.0), 1, 2);
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 2);
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 1);
-        new Johnson().findCircuits(dsg);
+        Johnson j = new Johnson(dsg);
+        j.findCircuits();
+        assertTrue(j.circuits.size() == 1);
+        System.err.println(j.circuits.get(0));
+        assertTrue(j.circuits.get(0).contains(2));
+        assertTrue(j.circuits.get(0).contains(1));
     }
 
     @Test
@@ -65,10 +71,26 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 2);
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 1);
         dsg.addEdge(new WeightedEdge((float) 1.0), 2, 1);
-        new Johnson().findCircuits(dsg);
+        new Johnson(dsg).findCircuits();
     }
 
     @Test
+    public void testTarjan3() throws JohnsonIllegalStateException {
+        DirectedGraph<Integer, WeightedEdge> dsg = new DirectedSparseGraph<Integer, WeightedEdge>();
+        dsg.addEdge(new WeightedEdge((float) 1.0), 1, 2);
+        dsg.addEdge(new WeightedEdge((float) 1.0), 2, 1);
+        dsg.addEdge(new WeightedEdge((float) 1.0), 2, 3);
+        dsg.addEdge(new WeightedEdge((float) 1.0), 2, 4);
+        dsg.addEdge(new WeightedEdge((float) 1.0), 4, 2);
+        DirectedGraph<Integer, WeightedEdge> leastScc = Johnson.leastSCC(dsg);
+        System.err.println(leastScc);
+        assertTrue(leastScc.getVertices().contains(1));
+        assertTrue(leastScc.getVertices().contains(2));
+        assertTrue(leastScc.getVertices().contains(4));
+        assertTrue(leastScc.getVertexCount() == 3);
+    }
+    
+    //@Test
     public void testLargeGraph() throws JohnsonIllegalStateException {
         DirectedGraph<Integer, WeightedEdge> dg = new DirectedSparseGraph<Integer, WeightedEdge>();
         Random r = new Random();
@@ -85,6 +107,6 @@ public class TestJohnson {
         }
         System.err.println("edges: " + dg.getEdgeCount());
         System.err.println(dg);
-        new Johnson().findCircuits(dg);
+        new Johnson(dg).findCircuits();
     }
 }
