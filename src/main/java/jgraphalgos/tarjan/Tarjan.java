@@ -1,4 +1,4 @@
-package net.sf.graphalgorithms.tarjan;
+package jgraphalgos.tarjan;
 
 import java.util.ArrayList;
 import java.util.HashMap;

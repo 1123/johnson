@@ -1,4 +1,4 @@
-package net.sf.graphalgorithms.johnson;
+package jgraphalgos;
 
 public class WeightedEdge {
 	float f;

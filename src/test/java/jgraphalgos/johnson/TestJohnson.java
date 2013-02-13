@@ -1,12 +1,15 @@
-package net.sf.graphalgorithms.johnson;
+package jgraphalgos.johnson;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import net.sf.graphalgorithms.johnson.Johnson.JohnsonIllegalStateException;
 
 import org.junit.Test;
 
 import java.util.Random;
+
+import jgraphalgos.johnson.Johnson;
+import jgraphalgos.WeightedEdge;
+import jgraphalgos.johnson.Johnson.JohnsonIllegalStateException;
 
 import static org.junit.Assert.assertTrue;
 
@@ -34,6 +37,10 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge((float) 1.0), 6, 4);
         Johnson j = new Johnson(dsg);
         j.findCircuits();
+        assertTrue(j.circuits.size() == 2);
+        assertTrue(j.circuits.get(1).contains(4));
+        assertTrue(j.circuits.get(1).contains(5));
+        assertTrue(j.circuits.get(1).contains(6));
     }
 
     @Test
@@ -71,7 +78,12 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 2);
         dsg.addEdge(new WeightedEdge((float) 1.0), 3, 1);
         dsg.addEdge(new WeightedEdge((float) 1.0), 2, 1);
-        new Johnson(dsg).findCircuits();
+        Johnson j = new Johnson(dsg);
+        j.findCircuits();
+        System.err.println(j.circuits);
+        assertTrue(j.circuits.size() == 2);
+        assertTrue(j.circuits.get(0).contains(1));
+        assertTrue(j.circuits.get(0).contains(3));
     }
 
     @Test

@@ -1,11 +1,13 @@
-package net.sf.graphalgorithms.johnson;
+package jgraphalgos.johnson;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 import java.util.*;
 
-import net.sf.graphalgorithms.tarjan.Tarjan;
+import jgraphalgos.WeightedEdge;
+import jgraphalgos.tarjan.Tarjan;
+
 
 public class Johnson {
 

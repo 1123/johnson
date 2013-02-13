@@ -1,4 +1,6 @@
-package net.sf.graphalgorithms.johnson;
+package jgraphalgos;
+
+import jgraphalgos.WeightedEdge;
 
 import org.junit.Test;
 
