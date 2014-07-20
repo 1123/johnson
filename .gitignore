@@ -1,4 +1,6 @@
+.idea/
 target/
 .project
 .classpath
 .settings
+johnson.iml
