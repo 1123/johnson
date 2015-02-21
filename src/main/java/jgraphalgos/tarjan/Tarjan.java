@@ -1,12 +1,6 @@
 package jgraphalgos.tarjan;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-
-import edu.uci.ics.jung.graph.DirectedGraph;
+import java.util.*;
 
 /**
 From Wikipedia (http://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm):
@@ -24,39 +18,39 @@ algorithm tarjan is
   **/
 
 
-public class Tarjan <NodeType,EdgeType> {
-	
+public class Tarjan<N> {
+
 	int index;
-	DirectedGraph<NodeType, EdgeType> dg;
-	Stack<NodeType> stack;
-	Map<NodeType, Integer> indexMap;
-	Map<NodeType, Integer> lowLinkMap;
-	
-	public List<List<NodeType>> tarjan() {
+	MyDag<N> dg;
+	Stack<N> stack;
+	Map<N, Integer> indexMap;
+	Map<N, Integer> lowLinkMap;
+
+	public List<List<N>> tarjan() {
 		this.index = 0;
-		stack = new Stack<NodeType>();
-		List<List<NodeType>> result = new ArrayList<List<NodeType>>();
-		for (NodeType v : this.dg.getVertices()) {
+		stack = new Stack<N>();
+		List<List<N>> result = new ArrayList<List<N>>();
+		for (N v : this.dg.getVertices()) {
 			if (indexMap.get(v) == null) {
 				result.addAll(this.strongConnect(v));
 			}
 		}
 		return result;
 	}
-	
-	public Tarjan(DirectedGraph<NodeType, EdgeType> dg) {
+
+	public Tarjan(MyDag<N> dg) {
 		this.index = 0;
 		this.dg = dg;
-		this.indexMap = new HashMap<NodeType, Integer>();
-		this.lowLinkMap = new HashMap<NodeType, Integer>();
+		this.indexMap = new HashMap<N, Integer>();
+		this.lowLinkMap = new HashMap<N, Integer>();
 	}
 	
-	public List<List<NodeType>> strongConnect(NodeType v) {
+	public List<List<N>> strongConnect(N v) {
 		indexMap.put(v, index);
 		lowLinkMap.put(v, index);
 		index++;
 		stack.push(v);
-		for (NodeType w : dg.getSuccessors(v)) {
+		for (N w : dg.getSuccessors(v)) {
 			if (indexMap.get(w) == null) {
 				strongConnect(w);
 				lowLinkMap.put(v, Math.min(lowLinkMap.get(v), lowLinkMap.get(w)));
@@ -67,11 +61,11 @@ public class Tarjan <NodeType,EdgeType> {
 			}
 		}
 		
-		List<List<NodeType>> result = new ArrayList<List<NodeType>>();
+		List<List<N>> result = new ArrayList<List<N>>();
 		if (lowLinkMap.get(v).equals(indexMap.get(v))) {
-			List<NodeType> sccList = new ArrayList<NodeType>();
+			List<N> sccList = new ArrayList<N>();
 			while (true) {
-				NodeType w = stack.pop();
+				N w = stack.pop();
 				sccList.add(w);
 				if (w.equals(v)) {
 					break;

@@ -1,22 +1,18 @@
 package jgraphalgos.johnson;
 
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
-
-import java.util.*;
-
-import jgraphalgos.WeightedEdge;
+import jgraphalgos.tarjan.MyDag;
 import jgraphalgos.tarjan.Tarjan;
 
+import java.util.*;
 
 public class Johnson {
 
     Map<Integer, Boolean> blocked;
     Map<Integer, List<Integer>> blockedNodes;
     List<Stack<Integer>> circuits;
-    DirectedGraph<Integer, WeightedEdge> dg;
-    
-    public Johnson(DirectedGraph<Integer, WeightedEdge> dg) {
+    MyDag<Integer> dg;
+
+    public Johnson(MyDag<Integer> dg) {
         blocked = new HashMap<Integer, Boolean>();
         blockedNodes = new HashMap<Integer, List<Integer>>();
         circuits = new ArrayList<Stack<Integer>>();
@@ -33,7 +29,7 @@ public class Johnson {
         }
     }
 
-    public boolean circuit(DirectedGraph<Integer, WeightedEdge> dg, Integer v, Integer s, Stack<Integer> stack) throws JohnsonIllegalStateException {
+    public boolean circuit(MyDag<Integer> dg, Integer v, Integer s, Stack<Integer> stack) throws JohnsonIllegalStateException {
         if (dg == null) { throw new JohnsonIllegalStateException(); }
         if (dg.getVertexCount() == 0) { return false; }
         boolean f = false;
@@ -64,11 +60,18 @@ public class Johnson {
         return f;
     }
 
-    public static DirectedGraph<Integer, WeightedEdge> leastSCC(DirectedGraph<Integer,WeightedEdge> dg) throws JohnsonIllegalStateException {
-        Tarjan<Integer, WeightedEdge> t = new Tarjan<Integer, WeightedEdge>(dg);
+    /**
+     * Find the graph for the strongly connected component with the smallest vertex.
+     * @param dg the entire DAG
+     * @return the graph of the srongly connected component with the least vertex.
+     * @throws JohnsonIllegalStateException
+     */
+
+    public static MyDag<Integer> leastSCC(MyDag<Integer> dg) throws JohnsonIllegalStateException {
+        Tarjan<Integer> t = new Tarjan<>(dg);
     	List<List<Integer>> sccs = t.tarjan();
         Integer min = Integer.MAX_VALUE;
-        List<Integer> minScc = new ArrayList<Integer>();
+        List<Integer> minScc = new ArrayList<>();
         for (List<Integer> scc : sccs) {
             if (scc.size() == 1) { continue; }
             for (Integer i : scc) {
@@ -81,7 +84,7 @@ public class Johnson {
         return addEdges(minScc, dg);
     }
 
-    public Integer leastVertex(DirectedGraph<Integer, WeightedEdge> in) {
+    public Integer leastVertex(MyDag<Integer> in) {
         Integer result = Integer.MAX_VALUE;
         for (Integer i : in.getVertices()) {
             if (i < result) {
@@ -91,28 +94,27 @@ public class Johnson {
         return result;
     }
 
-    private static DirectedGraph<Integer, WeightedEdge> addEdges(List<Integer> list, DirectedGraph<Integer, WeightedEdge> dg) throws JohnsonIllegalStateException {
+    private static MyDag<Integer> addEdges(List<Integer> list, MyDag<Integer> dg) throws JohnsonIllegalStateException {
         if (list == null) { throw new JohnsonIllegalStateException(); }
         if (dg == null) { throw new JohnsonIllegalStateException(); }
-        DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<Integer, WeightedEdge>();
-        for (Integer i : list) {
-            for (WeightedEdge edge : dg.getOutEdges(i)) {
-                Integer to = dg.getOpposite(i, edge);
-                if (list.contains(to)) {
-                    result.addEdge(edge, i, to);
+        MyDag<Integer> result = new MyDag<Integer>();
+        for (Integer from : list) {
+            for (Integer to : dg.getSuccessors(from)) {
+                if (list.contains(to)) { // only add the edge, if the sink is also part of the SCC.
+                    result.addEdge(from, to);
                 }
             }
         }
         return result;
     }
 
-    public static DirectedGraph<Integer, WeightedEdge> subGraphFrom(Integer i, DirectedGraph<Integer, WeightedEdge> in) {
-        DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<Integer, WeightedEdge>();
+    public static MyDag<Integer> subGraphFrom(Integer i, MyDag<Integer> in) {
+        MyDag<Integer> result = new MyDag<Integer>();
         for (Integer from : in.getVertices()) {
             if (from >= i) {
                 for (Integer to : in.getSuccessors(from)) {
                     if (to >= i) {
-                        result.addEdge(in.findEdge(from, to), from, to);
+                        result.addEdge(from, to);
                     }
                 }
             }
@@ -126,8 +128,8 @@ public class Johnson {
         Stack<Integer> stack = new Stack<Integer>();
         Integer s = 1;
         while (s < dg.getVertexCount()) {
-            DirectedGraph<Integer, WeightedEdge> subGraph = subGraphFrom(s,dg);
-            DirectedGraph<Integer, WeightedEdge> leastScc = leastSCC(subGraph);
+            MyDag<Integer> subGraph = subGraphFrom(s,dg);
+            MyDag<Integer> leastScc = leastSCC(subGraph);
             if (leastScc.getVertices().size() > 0) {
                 s = leastVertex(leastScc);
                 for (Integer i : leastScc.getVertices()) {

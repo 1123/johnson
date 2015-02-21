@@ -4,20 +4,14 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import jgraphalgos.WeightedEdge;
-import jgraphalgos.tarjan.Tarjan;
-
 
 import org.junit.Test;
-
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 /**
  * Unit test the Tarjan algorithm.
  */
 
-public class TestTarjan {
+public class TestTarjanWithoutJung {
 
     /**
      * Test for a binary strongly connected component.
@@ -25,10 +19,10 @@ public class TestTarjan {
 
 	@Test
 	public void test1() {
-		DirectedGraph<Integer, WeightedEdge> dg = new DirectedSparseGraph<Integer, WeightedEdge>();
-		dg.addEdge(new WeightedEdge(1.0f), 1, 2);
-		dg.addEdge(new WeightedEdge(1.0f), 2, 1);
-		Tarjan<Integer, WeightedEdge> t = new Tarjan<Integer, WeightedEdge>(dg);
+		MyDag<Integer> dg = new MyDag<Integer>();
+		dg.addEdge(1, 2);
+		dg.addEdge(2, 1);
+		Tarjan<Integer> t = new Tarjan<Integer>(dg);
 		List<List<Integer>> sccs = t.tarjan();
 		assertTrue(sccs.size() == 1);
 		assertTrue(sccs.get(0).contains(1));
@@ -41,9 +35,9 @@ public class TestTarjan {
 
 	@Test
 	public void test2() {
-		DirectedGraph<Integer, WeightedEdge> dg = new DirectedSparseGraph<Integer, WeightedEdge>();
-		dg.addEdge(new WeightedEdge(1.0f), 5, 6);
-		Tarjan<Integer, WeightedEdge> t = new Tarjan<Integer, WeightedEdge>(dg);
+		MyDag<Integer> dg = new MyDag<Integer>();
+		dg.addEdge(5, 6);
+		Tarjan<Integer> t = new Tarjan<>(dg);
 		List<List<Integer>> sccs = t.tarjan();
 		assertTrue(sccs.size() == 0);
 	}
@@ -54,12 +48,12 @@ public class TestTarjan {
 
 	@Test
 	public void test3() {
-		DirectedGraph<Integer, WeightedEdge> dg = new DirectedSparseGraph<Integer, WeightedEdge>();
-		dg.addEdge(new WeightedEdge(1.0f), 5, 6);
-		dg.addEdge(new WeightedEdge(1.0f), 6, 7);
-		dg.addEdge(new WeightedEdge(1.0f), 7, 8);
-		dg.addEdge(new WeightedEdge(1.0f), 8, 5);
-		Tarjan<Integer, WeightedEdge> t = new Tarjan<Integer, WeightedEdge>(dg);
+        MyDag<Integer> dg = new MyDag<Integer>();
+		dg.addEdge(5, 6);
+		dg.addEdge(6, 7);
+		dg.addEdge(7, 8);
+		dg.addEdge(8, 5);
+		Tarjan<Integer> t = new Tarjan<Integer>(dg);
 		List<List<Integer>> sccs = t.tarjan();
 		assertTrue(sccs.size() == 1);
 		assertTrue(sccs.get(0).contains(5));
@@ -74,12 +68,12 @@ public class TestTarjan {
 
 	@Test
 	public void test4() {
-		DirectedGraph<Integer, WeightedEdge> dg = new DirectedSparseGraph<Integer, WeightedEdge>();
-		dg.addEdge(new WeightedEdge(1.0f), 5, 6);
-		dg.addEdge(new WeightedEdge(1.0f), 6, 5);
-		dg.addEdge(new WeightedEdge(1.0f), 7, 8);
-		dg.addEdge(new WeightedEdge(1.0f), 8, 7);
-		Tarjan<Integer, WeightedEdge> t = new Tarjan<Integer, WeightedEdge>(dg);
+        MyDag<Integer> dg = new MyDag<Integer>();
+		dg.addEdge(5, 6);
+		dg.addEdge(6, 5);
+		dg.addEdge(7, 8);
+		dg.addEdge(8, 7);
+        Tarjan<Integer> t = new Tarjan<Integer>(dg);
 		List<List<Integer>> sccs = t.tarjan();
 		assertTrue(sccs.size() == 2);
 		assertTrue(sccs.get(0).contains(5));
