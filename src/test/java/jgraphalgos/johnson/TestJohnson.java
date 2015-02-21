@@ -1,6 +1,6 @@
 package jgraphalgos.johnson;
 
-import jgraphalgos.tarjan.MyDag;
+import jgraphalgos.tarjan.HashMapDag;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.Stack;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-public class TestJohnsonWithoutJung {
+public class TestJohnson {
 
     /**
      * Test for detection of two binary cycles.
@@ -18,7 +18,7 @@ public class TestJohnsonWithoutJung {
 
     @Test
     public void testJohnson() throws Johnson.JohnsonIllegalStateException {
-        MyDag<Integer> dsg = new MyDag<>();
+        HashMapDag<Integer> dsg = new HashMapDag<>();
         dsg.addEdge(1, 3);
         dsg.addEdge(3, 1);
         dsg.addEdge(3, 2);
@@ -38,7 +38,7 @@ public class TestJohnsonWithoutJung {
 
     @Test
     public void testJohnson2() throws Johnson.JohnsonIllegalStateException {
-        MyDag<Integer> dsg = new MyDag<>();
+        HashMapDag<Integer> dsg = new HashMapDag<>();
         dsg.addEdge(1, 2);
         dsg.addEdge(2, 1);
         dsg.addEdge(2, 3);
@@ -59,12 +59,12 @@ public class TestJohnsonWithoutJung {
 
     @Test
     public void testSubGraphFrom() {
-        MyDag<Integer> dsg = new MyDag<>();
+        HashMapDag<Integer> dsg = new HashMapDag<>();
         dsg.addEdge(1, 3);
         dsg.addEdge(3, 1);
         dsg.addEdge(3, 2);
         dsg.addEdge(2, 3);
-        MyDag<Integer> subGraph = Johnson.subGraphFrom(2, dsg);
+        HashMapDag<Integer> subGraph = Johnson.subGraphFrom(2, dsg);
         assertTrue(subGraph.containsVertex(2));
         assertTrue(subGraph.containsVertex(3));
         System.err.println(subGraph);
@@ -72,7 +72,7 @@ public class TestJohnsonWithoutJung {
 
     @Test
     public void testJohnson3() throws Johnson.JohnsonIllegalStateException {
-        MyDag<Integer> dsg = new MyDag<>();
+        HashMapDag<Integer> dsg = new HashMapDag<>();
         dsg.addEdge(2, 1);
         dsg.addEdge(1, 2);
         dsg.addEdge(3, 2);
@@ -87,7 +87,7 @@ public class TestJohnsonWithoutJung {
 
     @Test
     public void testJohnson4() throws Johnson.JohnsonIllegalStateException {
-        MyDag<Integer> dsg = new MyDag<>();
+        HashMapDag<Integer> dsg = new HashMapDag<>();
         dsg.addEdge(1, 3);
         dsg.addEdge(3, 2);
         dsg.addEdge(3, 1);
@@ -106,13 +106,13 @@ public class TestJohnsonWithoutJung {
 
     @Test
     public void testTarjan3() throws Johnson.JohnsonIllegalStateException {
-        MyDag<Integer> dsg = new MyDag<>();
+        HashMapDag<Integer> dsg = new HashMapDag<>();
         dsg.addEdge(1, 2);
         dsg.addEdge(2, 1);
         dsg.addEdge(2, 3);
         dsg.addEdge(2, 4);
         dsg.addEdge(4, 2);
-        MyDag<Integer> leastScc = Johnson.leastSCC(dsg);
+        HashMapDag<Integer> leastScc = Johnson.leastSCC(dsg);
         System.err.println(leastScc);
         assertTrue(leastScc.getVertices().contains(1));
         assertTrue(leastScc.getVertices().contains(2));
@@ -123,7 +123,7 @@ public class TestJohnsonWithoutJung {
 
     @Test
     public void testLargeGraph() throws Johnson.JohnsonIllegalStateException {
-        MyDag<Integer> dg = new MyDag<>();
+        HashMapDag<Integer> dg = new HashMapDag<>();
         Random r = new Random();
         int nodes = 30;
         int edges = 50;

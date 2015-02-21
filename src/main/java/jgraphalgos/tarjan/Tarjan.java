@@ -21,7 +21,7 @@ algorithm tarjan is
 public class Tarjan<N> {
 
 	int index;
-	MyDag<N> dg;
+    HashMapDag<N> dg;
 	Stack<N> stack;
 	Map<N, Integer> indexMap;
 	Map<N, Integer> lowLinkMap;
@@ -38,7 +38,7 @@ public class Tarjan<N> {
 		return result;
 	}
 
-	public Tarjan(MyDag<N> dg) {
+	public Tarjan(HashMapDag<N> dg) {
 		this.index = 0;
 		this.dg = dg;
 		this.indexMap = new HashMap<N, Integer>();

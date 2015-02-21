@@ -11,7 +11,7 @@ import org.junit.Test;
  * Unit test the Tarjan algorithm.
  */
 
-public class TestTarjanWithoutJung {
+public class TestTarjan {
 
     /**
      * Test for a binary strongly connected component.
@@ -19,7 +19,7 @@ public class TestTarjanWithoutJung {
 
 	@Test
 	public void test1() {
-		MyDag<Integer> dg = new MyDag<Integer>();
+		HashMapDag<Integer> dg = new HashMapDag<Integer>();
 		dg.addEdge(1, 2);
 		dg.addEdge(2, 1);
 		Tarjan<Integer> t = new Tarjan<Integer>(dg);
@@ -35,7 +35,7 @@ public class TestTarjanWithoutJung {
 
 	@Test
 	public void test2() {
-		MyDag<Integer> dg = new MyDag<Integer>();
+        HashMapDag<Integer> dg = new HashMapDag<Integer>();
 		dg.addEdge(5, 6);
 		Tarjan<Integer> t = new Tarjan<>(dg);
 		List<List<Integer>> sccs = t.tarjan();
@@ -48,7 +48,7 @@ public class TestTarjanWithoutJung {
 
 	@Test
 	public void test3() {
-        MyDag<Integer> dg = new MyDag<Integer>();
+        HashMapDag<Integer> dg = new HashMapDag<Integer>();
 		dg.addEdge(5, 6);
 		dg.addEdge(6, 7);
 		dg.addEdge(7, 8);
@@ -68,7 +68,7 @@ public class TestTarjanWithoutJung {
 
 	@Test
 	public void test4() {
-        MyDag<Integer> dg = new MyDag<Integer>();
+        HashMapDag<Integer> dg = new HashMapDag<Integer>();
 		dg.addEdge(5, 6);
 		dg.addEdge(6, 5);
 		dg.addEdge(7, 8);

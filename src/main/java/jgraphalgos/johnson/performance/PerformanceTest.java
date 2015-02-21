@@ -1,7 +1,7 @@
 package jgraphalgos.johnson.performance;
 
 import jgraphalgos.johnson.Johnson;
-import jgraphalgos.tarjan.MyDag;
+import jgraphalgos.tarjan.HashMapDag;
 import org.junit.Test;
 
 import java.util.Random;
@@ -42,7 +42,7 @@ public class PerformanceTest {
 
     private void measure(int nodes, int edges) throws Johnson.JohnsonIllegalStateException {
         System.err.println(String.format("Nodes: %d, edges: %d", nodes, edges));
-        MyDag<Integer> dg = new MyDag<>();
+        HashMapDag<Integer> dg = new HashMapDag<>();
         Random r = new Random();
         long startConstruct = System.currentTimeMillis();
         for (int i = 0; i < edges; i++) {

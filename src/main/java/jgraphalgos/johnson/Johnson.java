@@ -1,6 +1,6 @@
 package jgraphalgos.johnson;
 
-import jgraphalgos.tarjan.MyDag;
+import jgraphalgos.tarjan.HashMapDag;
 import jgraphalgos.tarjan.Tarjan;
 
 import java.util.*;
@@ -10,9 +10,9 @@ public class Johnson {
     Map<Integer, Boolean> blocked;
     Map<Integer, List<Integer>> blockedNodes;
     List<Stack<Integer>> circuits;
-    MyDag<Integer> dg;
+    HashMapDag<Integer> dg;
 
-    public Johnson(MyDag<Integer> dg) {
+    public Johnson(HashMapDag<Integer> dg) {
         blocked = new HashMap<Integer, Boolean>();
         blockedNodes = new HashMap<Integer, List<Integer>>();
         circuits = new ArrayList<Stack<Integer>>();
@@ -29,7 +29,7 @@ public class Johnson {
         }
     }
 
-    public boolean circuit(MyDag<Integer> dg, Integer v, Integer s, Stack<Integer> stack) throws JohnsonIllegalStateException {
+    public boolean circuit(HashMapDag<Integer> dg, Integer v, Integer s, Stack<Integer> stack) throws JohnsonIllegalStateException {
         if (dg == null) { throw new JohnsonIllegalStateException(); }
         if (dg.getVertexCount() == 0) { return false; }
         boolean f = false;
@@ -67,7 +67,7 @@ public class Johnson {
      * @throws JohnsonIllegalStateException
      */
 
-    public static MyDag<Integer> leastSCC(MyDag<Integer> dg) throws JohnsonIllegalStateException {
+    public static HashMapDag<Integer> leastSCC(HashMapDag<Integer> dg) throws JohnsonIllegalStateException {
         Tarjan<Integer> t = new Tarjan<>(dg);
     	List<List<Integer>> sccs = t.tarjan();
         Integer min = Integer.MAX_VALUE;
@@ -84,7 +84,7 @@ public class Johnson {
         return addEdges(minScc, dg);
     }
 
-    public Integer leastVertex(MyDag<Integer> in) {
+    public Integer leastVertex(HashMapDag<Integer> in) {
         Integer result = Integer.MAX_VALUE;
         for (Integer i : in.getVertices()) {
             if (i < result) {
@@ -94,10 +94,10 @@ public class Johnson {
         return result;
     }
 
-    private static MyDag<Integer> addEdges(List<Integer> list, MyDag<Integer> dg) throws JohnsonIllegalStateException {
+    private static HashMapDag<Integer> addEdges(List<Integer> list, HashMapDag<Integer> dg) throws JohnsonIllegalStateException {
         if (list == null) { throw new JohnsonIllegalStateException(); }
         if (dg == null) { throw new JohnsonIllegalStateException(); }
-        MyDag<Integer> result = new MyDag<Integer>();
+        HashMapDag<Integer> result = new HashMapDag<Integer>();
         for (Integer from : list) {
             for (Integer to : dg.getSuccessors(from)) {
                 if (list.contains(to)) { // only add the edge, if the sink is also part of the SCC.
@@ -108,8 +108,8 @@ public class Johnson {
         return result;
     }
 
-    public static MyDag<Integer> subGraphFrom(Integer i, MyDag<Integer> in) {
-        MyDag<Integer> result = new MyDag<Integer>();
+    public static HashMapDag<Integer> subGraphFrom(Integer i, HashMapDag<Integer> in) {
+        HashMapDag<Integer> result = new HashMapDag<Integer>();
         for (Integer from : in.getVertices()) {
             if (from >= i) {
                 for (Integer to : in.getSuccessors(from)) {
@@ -128,8 +128,8 @@ public class Johnson {
         Stack<Integer> stack = new Stack<Integer>();
         Integer s = 1;
         while (s < dg.getVertexCount()) {
-            MyDag<Integer> subGraph = subGraphFrom(s,dg);
-            MyDag<Integer> leastScc = leastSCC(subGraph);
+            HashMapDag<Integer> subGraph = subGraphFrom(s,dg);
+            HashMapDag<Integer> leastScc = leastSCC(subGraph);
             if (leastScc.getVertices().size() > 0) {
                 s = leastVertex(leastScc);
                 for (Integer i : leastScc.getVertices()) {
