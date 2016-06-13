@@ -87,6 +87,31 @@ public class TestTarjan {
 		assertTrue(sccs.get(1).contains(7));
 		assertTrue(sccs.get(1).contains(8));
 	}
-	
+
+	/*
+	 *	Test for discovering lower level Strongly Connected Components
+	 */
+
+	@Test
+	public void testLowerLevelComponents() {
+		DirectedGraph<Integer, WeightedEdge> dg = new DirectedSparseGraph<>();
+		dg.addEdge(new WeightedEdge(1.0f), 1, 2);
+		dg.addEdge(new WeightedEdge(1.0f), 2, 3);
+		dg.addEdge(new WeightedEdge(1.0f), 2, 4);
+		dg.addEdge(new WeightedEdge(1.0f), 3, 2);
+		dg.addEdge(new WeightedEdge(1.0f), 3, 4);
+		dg.addEdge(new WeightedEdge(1.0f), 4, 3);
+		
+		// for this graph, all nodes are discovered in one "top-level" strongConnect() call 
+		// (specifically the call to strongConnect(1)) and the actual component is added to 
+		// the components list at a "lower-level" call to strongConnect()
+
+		Tarjan<Integer, WeightedEdge> tarjan = new Tarjan<>();
+		List<List<Integer>> sccs = tarjan.tarjan();
+		assertTrue(sccs.size() == 1);
+		assertTrue(sccs.get(0).contains(2));
+		assertTrue(sccs.get(0).contains(3));
+		assertTrue(sccs.get(0).contains(4));
+	}
 	
 }
