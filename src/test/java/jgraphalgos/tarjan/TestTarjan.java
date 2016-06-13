@@ -106,7 +106,7 @@ public class TestTarjan {
 		// (specifically the call to strongConnect(1)) and the actual component is added to 
 		// the components list at a "lower-level" call to strongConnect()
 
-		Tarjan<Integer, WeightedEdge> tarjan = new Tarjan<>();
+		Tarjan<Integer, WeightedEdge> tarjan = new Tarjan<>(dg);
 		List<List<Integer>> sccs = tarjan.tarjan();
 		assertTrue(sccs.size() == 1);
 		assertTrue(sccs.get(0).contains(2));
