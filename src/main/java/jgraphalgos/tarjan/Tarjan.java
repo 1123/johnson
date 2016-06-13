@@ -56,9 +56,10 @@ public class Tarjan <NodeType,EdgeType> {
 		lowLinkMap.put(v, index);
 		index++;
 		stack.push(v);
+		List<List<NodeType>> result = new ArrayList<List<NodeType>>();
 		for (NodeType w : dg.getSuccessors(v)) {
 			if (indexMap.get(w) == null) {
-				strongConnect(w);
+				result.addAll(strongConnect(w));
 				lowLinkMap.put(v, Math.min(lowLinkMap.get(v), lowLinkMap.get(w)));
 			} else {
 				if (stack.contains(w)) {
@@ -67,7 +68,6 @@ public class Tarjan <NodeType,EdgeType> {
 			}
 		}
 		
-		List<List<NodeType>> result = new ArrayList<List<NodeType>>();
 		if (lowLinkMap.get(v).equals(indexMap.get(v))) {
 			List<NodeType> sccList = new ArrayList<NodeType>();
 			while (true) {
