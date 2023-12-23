@@ -35,7 +35,7 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge(1.0f), 2, 3);
         Johnson j = new Johnson(dsg);
         j.findCircuits();
-        assertSame(j.circuits.size(), 2);
+        assertSame(2, j.circuits.size());
         Stack<Integer> expected1 = new Stack<Integer>();
         // TODO: there is no necessity for a node appearing twice within a cycle.
         expected1.addAll(Arrays.asList(1, 3, 1));
@@ -59,7 +59,7 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge(1.0f), 6, 4);
         Johnson j = new Johnson(dsg);
         j.findCircuits();
-        assertSame(j.circuits.size(), 2);
+        assertSame(2, j.circuits.size());
         assertTrue(j.circuits.get(1).contains(4));
         assertTrue(j.circuits.get(1).contains(5));
         assertTrue(j.circuits.get(1).contains(6));
@@ -82,6 +82,43 @@ public class TestJohnson {
         System.err.println(subGraph);
     }
 
+    /*  from https://stackoverflow.com/questions/27218194/should-d-b-johnsons-elementary-circuits-algorithm-produce-distinct-results:
+    gr := gs.NewGraph()
+
+    a := gr.CreateAndAddToGraph("A")
+    b := gr.CreateAndAddToGraph("B")
+    c := gr.CreateAndAddToGraph("C")
+    d := gr.CreateAndAddToGraph("D")
+    e := gr.CreateAndAddToGraph("E")
+    f := gr.CreateAndAddToGraph("F")
+
+    gr.Connect(a, b, 1)
+    gr.Connect(b, c, 1)
+    gr.Connect(c, a, 1)
+
+    gr.Connect(d, e, 1)
+    gr.Connect(e, f, 1)
+    gr.Connect(f, d, 1)
+     */
+
+
+    @Test
+    public void testTwoTernaryCycles() throws JohnsonIllegalStateException {
+        DirectedGraph<Integer, WeightedEdge> dsg = new DirectedSparseGraph<>();
+        dsg.addEdge(new WeightedEdge(1.0f), 1, 2);
+        dsg.addEdge(new WeightedEdge(1.0f), 2, 3);
+        dsg.addEdge(new WeightedEdge(1.0f), 3, 1);
+
+        dsg.addEdge(new WeightedEdge(1.0f), 4, 5);
+        dsg.addEdge(new WeightedEdge(1.0f), 5, 6);
+        dsg.addEdge(new WeightedEdge(1.0f), 6, 4);
+
+        Johnson j = new Johnson(dsg);
+        j.findCircuits();
+        System.err.println(j.circuits);
+        assertEquals(2, j.circuits.size());
+    }
+
     /**
      * Test for a graph with one binary cycle.
      * @throws JohnsonIllegalStateException
@@ -96,7 +133,7 @@ public class TestJohnson {
         dsg.addEdge(new WeightedEdge(1.0f), 3, 1);
         Johnson j = new Johnson(dsg);
         j.findCircuits();
-        assertTrue(j.circuits.size() == 1);
+        assertEquals(1, j.circuits.size());
         System.err.println(j.circuits.get(0));
         assertTrue(j.circuits.get(0).contains(2));
         assertTrue(j.circuits.get(0).contains(1));
@@ -112,14 +149,14 @@ public class TestJohnson {
         Johnson j = new Johnson(dsg);
         j.findCircuits();
         System.err.println(j.circuits);
-        assertTrue(j.circuits.size() == 2);
+        assertEquals(2, j.circuits.size());
         assertTrue(j.circuits.get(0).contains(1));
         assertTrue(j.circuits.get(0).contains(3));
     }
 
     /**
      * Test for detection of strongly connected components.
-     * @throws JohnsonIllegalStateException
+     * @throws JohnsonIllegalStateException: if the computation reaches a state that should never be reached.
      */
 
     @Test
@@ -135,7 +172,7 @@ public class TestJohnson {
         assertTrue(leastScc.getVertices().contains(1));
         assertTrue(leastScc.getVertices().contains(2));
         assertTrue(leastScc.getVertices().contains(4));
-        assertTrue(leastScc.getVertexCount() == 3);
+        assertEquals(3, leastScc.getVertexCount());
     }
     
 
@@ -158,4 +195,6 @@ public class TestJohnson {
         System.err.println(dg);
         new Johnson(dg).findCircuits();
     }
+
+
 }

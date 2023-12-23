@@ -17,9 +17,9 @@ public class Johnson {
     DirectedGraph<Integer, WeightedEdge> dg;
     
     public Johnson(DirectedGraph<Integer, WeightedEdge> dg) {
-        blocked = new HashMap<Integer, Boolean>();
-        blockedNodes = new HashMap<Integer, List<Integer>>();
-        circuits = new ArrayList<Stack<Integer>>();
+        blocked = new HashMap<>();
+        blockedNodes = new HashMap<>();
+        circuits = new ArrayList<>();
         this.dg = dg;
     }
     
@@ -40,7 +40,7 @@ public class Johnson {
         stack.push(v);
         blocked.put(v, true);
         for (Integer w : dg.getSuccessors(v)) {
-            if (w == s) {
+            if (Objects.equals(w, s)) {
                 stack.push(s);
                 this.circuits.add((Stack<Integer>) stack.clone());
                 stack.pop();
@@ -65,10 +65,10 @@ public class Johnson {
     }
 
     public static DirectedGraph<Integer, WeightedEdge> leastSCC(DirectedGraph<Integer,WeightedEdge> dg) throws JohnsonIllegalStateException {
-        Tarjan<Integer, WeightedEdge> t = new Tarjan<Integer, WeightedEdge>(dg);
+        Tarjan<Integer, WeightedEdge> t = new Tarjan<>(dg);
     	List<List<Integer>> sccs = t.tarjan();
         Integer min = Integer.MAX_VALUE;
-        List<Integer> minScc = new ArrayList<Integer>();
+        List<Integer> minScc = new ArrayList<>();
         for (List<Integer> scc : sccs) {
             if (scc.size() == 1) { continue; }
             for (Integer i : scc) {
@@ -94,7 +94,7 @@ public class Johnson {
     private static DirectedGraph<Integer, WeightedEdge> addEdges(List<Integer> list, DirectedGraph<Integer, WeightedEdge> dg) throws JohnsonIllegalStateException {
         if (list == null) { throw new JohnsonIllegalStateException(); }
         if (dg == null) { throw new JohnsonIllegalStateException(); }
-        DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<Integer, WeightedEdge>();
+        DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<>();
         for (Integer i : list) {
             for (WeightedEdge edge : dg.getOutEdges(i)) {
                 Integer to = dg.getOpposite(i, edge);
@@ -107,7 +107,7 @@ public class Johnson {
     }
 
     public static DirectedGraph<Integer, WeightedEdge> subGraphFrom(Integer i, DirectedGraph<Integer, WeightedEdge> in) {
-        DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<Integer, WeightedEdge>();
+        DirectedGraph<Integer, WeightedEdge> result = new DirectedSparseGraph<>();
         for (Integer from : in.getVertices()) {
             if (from >= i) {
                 for (Integer to : in.getSuccessors(from)) {
