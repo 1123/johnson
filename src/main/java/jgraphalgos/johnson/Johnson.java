@@ -121,9 +121,9 @@ public class Johnson {
     }
     
     public void findCircuits() throws JohnsonIllegalStateException {
-        blocked = new HashMap<Integer, Boolean>();
-        blockedNodes = new HashMap<Integer, List<Integer>>();
-        Stack<Integer> stack = new Stack<Integer>();
+        blocked = new HashMap<>();
+        blockedNodes = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
         Integer s = 1;
         while (s < dg.getVertexCount()) {
             DirectedGraph<Integer, WeightedEdge> subGraph = subGraphFrom(s,dg);
@@ -134,7 +134,7 @@ public class Johnson {
                     blocked.put(i, false);
                     blockedNodes.put(i, new ArrayList<Integer>());
                 }
-                boolean dummy = circuit(leastScc, s, s, stack);
+                circuit(leastScc, s, s, stack);
                 s++;
             }
             else {
