@@ -7,7 +7,7 @@ Usage of this libary is best learned by looking at the test cases within the src
 Requirements
 ============
 
-Java 1.6 or later. Maven for building.
+Java 11 or later. Maven for building.
 
 Installation
 ============
